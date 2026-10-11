@@ -15,7 +15,7 @@ To see every feature in under a minute:
 3. Tap "Seal as evidence". Enter any passphrase of 12 or more characters twice, tick the box and
    tap Seal. Sealing takes a few seconds on purpose (Argon2id key derivation).
 4. Vault tab: the sealed vault is listed. Tap "Check the log" to verify the custody log.
-5. Plan tab: new installs have Pro free for 180 days, so all Pro features are unlocked for review.
+5. Plan tab: new installs have Pro free for 7 days, so all Pro features are unlocked for review.
    The one-time Pro product is "arcalume_pro".
 
 Permissions: CAMERA is used only for the in-app document camera and is optional (import uses the

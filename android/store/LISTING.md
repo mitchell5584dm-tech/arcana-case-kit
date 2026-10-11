@@ -9,7 +9,7 @@ Character limits are Play Console's.
 `Revive glare- and shadow-damaged pages, prove every change, seal the original.` (78)
 
 **Category:** Productivity. **Tags:** Document scanner, PDF & document tools.
-**Contains ads:** No. **In-app purchases:** Yes (one-time Pro unlock, US$5.99).
+**Contains ads:** No. **In-app purchases:** Yes (one-time Pro unlock, US$14.99).
 
 ## Full description (4000)
 

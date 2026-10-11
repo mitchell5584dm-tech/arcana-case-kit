@@ -18,7 +18,7 @@ owner can take, in order.
 1. Create app: name *Arcalume: Document Forensics*, default language English (US), App, Free,
    and accept the declarations.
 2. Monetize > Products > In-app products: create **`arcalume_pro`** (this exact id is in
-   `Brand.PRO_PRODUCT_ID`), one-time, priced at **US$5.99** (David's decision, 2026-09-30).
+   `Brand.PRO_PRODUCT_ID`), one-time, priced at **US$14.99** (David's decision, 2026-10-11).
 3. Monetization setup > Licensing: copy the **base64 RSA public key** into
    `Brand.PLAY_LICENSE_KEY` so purchases are signature-checked on the device.
 4. Fill every App content form (privacy policy, ads, app access, content rating, target
@@ -64,7 +64,7 @@ log check, and saves the store screenshots on the way.
 
 ## Decisions only the owner can make
 
-- **180 days free (decided).** Every new install gets Pro free for 180 days, counted on the
+- **7 days free (decided 2026-10-11, was 180).** Every new install gets Pro free for 7 days, counted on the
   device from first launch (`core/Trial.kt`). It needs no Play free-trial setup, because Play
   trials exist only for subscriptions. Reinstalling or clearing app data restarts the count;
   closing that gap would need an account or server, which conflicts with local-only processing.

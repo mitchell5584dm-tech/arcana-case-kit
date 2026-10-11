@@ -28,7 +28,7 @@ The Markdown here is the source. `python3 android/store/build_pages.py` renders 
 - **Refunds:** full refund on request within 30 days, on top of Google's 48-hour window.
 - **Liability cap:** what the customer paid in the last 12 months, or US$10.
 - **Age:** 18+ target audience; the privacy policy also states the app is not directed at under-13s.
-- **180-day offer wording:** may restart on reinstall; can change for new installs, but never
+- **7-day offer wording:** may restart on reinstall; can change for new installs, but never
   shortens a running period.
 
 ## Before release

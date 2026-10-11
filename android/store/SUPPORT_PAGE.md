@@ -28,8 +28,8 @@ Google account you bought with. If that does not work, email us your order numbe
 
 ## How long is Pro free?
 
-Every new install gets Pro free for 180 days from first launch. The Plan tab shows how many days
-are left. After that you can keep Pro with one payment of US$5.99. Nothing is charged
+Every new install gets Pro free for 7 days from first launch. The Plan tab shows how many days
+are left. After that you can keep Pro with one payment of US$14.99. Nothing is charged
 automatically.
 
 ## Refunds

@@ -17,7 +17,7 @@ each screenshot in a design tool (keep it to the wording here, which matches wha
 | `05-sealed.png` | Sealed, with a fingerprint | Sealed dialog with the log fingerprint |
 | `06-vault.png` | Your vault, on your phone | Vault list |
 | `07-log-checked.png` | Check the chain any time | "Chain intact" after Check the log |
-| `08-plan.png` | 180 days of Pro, free | Plan tab with the free Pro period |
+| `08-plan.png` | 7 days of Pro, free | Plan tab with the free Pro period |
 
 Do not add claims to captions that are not in `LISTING.md`'s claim map (for example
 "court-ready", "AI" or "tamper-proof").

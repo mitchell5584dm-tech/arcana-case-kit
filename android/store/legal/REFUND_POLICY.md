@@ -2,8 +2,8 @@
 
 Effective date: [DATE OF FIRST RELEASE]
 
-Every new install of Arcalume includes Pro free for 180 days, so you can try everything before you
-pay. If you buy Pro (a one-time US$5.99 purchase through Google Play) and it does not work out,
+Every new install of Arcalume includes Pro free for 7 days, so you can try everything before you
+pay. If you buy Pro (a one-time US$14.99 purchase through Google Play) and it does not work out,
 here is how to get your money back.
 
 ## Within 48 hours of buying

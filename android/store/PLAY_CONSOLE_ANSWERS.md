@@ -105,7 +105,7 @@ permissions** declaration does not apply.
 - Contact details: email support@arcana-forensics.com, website
   `https://arcana-forensics.com/arcalume/support`. A phone number is optional, unless you declare
   trader status (below), which shows it publicly.
-- Pricing: **Free** app with in-app products. In-app product `arcalume_pro`, one-time, US$5.99,
+- Pricing: **Free** app with in-app products. In-app product `arcalume_pro`, one-time, US$14.99,
   with Play's suggested local prices.
 - Countries: all where Play sells paid apps, minus any you choose to exclude. Excluding embargoed
   countries is handled by Google.

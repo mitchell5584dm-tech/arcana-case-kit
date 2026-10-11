@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
 /**
- * Wraps the real store (Play Billing or license keys) with the 180-day introductory Pro
+ * Wraps the real store (Play Billing or license keys) with the 7-day introductory Pro
  * offer. The offer's clock is kept in app-private preferences, which are excluded from
  * backups, so it starts at the first launch on each device.
  */

@@ -16,15 +16,16 @@ rent or redistribute the app, or remove its notices. Open-source components keep
 licences, listed in the app under Plan > About > Open-source licenses and in our third-party
 notices. Nothing in these terms limits your rights under those licences.
 
-## 2. Free features, Pro and the 180-day offer
+## 2. Free features, Pro and the 7-day offer
 
-- The app is free to install. Recovery, comparison, the filled-pixel map, and opening and checking
-  vaults are free and stay free.
-- **Pro** adds clean saved copies, sealing into vaults with a custody log, and sealing a whole
-  session at once. It is a one-time purchase (US$5.99 or the local price Google Play shows), not
+- The app is free to install. Your case file and its metadata checks, chat transcripts, exhibit packets of up to
+  three exhibits, recovery, comparison, the filled-pixel map, and opening and checking vaults are
+  free and stay free.
+- **Pro** adds exhibit packets with every exhibit, verification bundles, clean saved copies, sealing into vaults with a custody log, and sealing a whole
+  session at once. It is a one-time purchase (US$14.99 or the local price Google Play shows), not
   a subscription. It is tied to the Google account you buy with and can be restored on your other
   devices through Google Play.
-- **180 days of free Pro.** Each new install includes Pro free for 180 days from first launch,
+- **7 days of free Pro.** Each new install includes Pro free for 7 days from first launch,
   counted on the device. It ends on its own; you are never charged automatically. Reinstalling or
   clearing the app's storage may restart the count, and we may change or end this offer for new
   installs in later versions, but not shorten a period already running on your device.

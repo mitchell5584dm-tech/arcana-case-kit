@@ -10,7 +10,7 @@ import java.time.ZoneOffset
  * set back, the latest time already seen is used instead.
  */
 object Trial {
-    const val DAYS = 180
+    const val DAYS = 7
     private const val DAY_MS = 24L * 60 * 60 * 1000
 
     data class State(val startedMillis: Long, val lastSeenMillis: Long) {

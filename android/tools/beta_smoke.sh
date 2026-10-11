@@ -146,7 +146,7 @@ shot 07-log-checked
 
 log "plan"
 tap "Plan" || fail "no Plan tab"
-wait_for "Pro, free for 180 more days" 10 || fail "the free Pro offer is not shown"
+wait_for "Pro, free for 7 more days" 10 || fail "the free Pro offer is not shown"
 to_top
 shot 08-plan
 

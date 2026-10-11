@@ -26,7 +26,7 @@ pages, vaults and custody log are processed and stored only on your phone.
 - **Passphrases** you type to seal or open a vault are used on your phone to derive an encryption
   key. They are never stored and never sent anywhere. We cannot recover a forgotten passphrase.
 - **Your plan.** The app stores whether Pro is unlocked, and the date of first launch so it can
-  count the 180 days of free Pro. These stay on your phone.
+  count the 7 days of free Pro. These stay on your phone.
 
 The app's storage is excluded from Google cloud backup and from device-to-device transfer, so
 none of this leaves your phone through a backup. Uninstalling the app, or clearing its storage in
