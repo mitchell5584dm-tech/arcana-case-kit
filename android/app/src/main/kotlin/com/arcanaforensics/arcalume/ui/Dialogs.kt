@@ -137,11 +137,11 @@ fun SealedDialog(outcome: SealOutcome, onCopied: () -> Unit, onExport: (java.io.
 }
 
 @Composable
-fun UpgradeDialog(onPlans: () -> Unit, onDismiss: () -> Unit) {
+fun UpgradeDialog(onPlans: () -> Unit, onDismiss: () -> Unit, body: String? = null) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.upgrade_title)) },
-        text = { Text(stringResource(R.string.upgrade_body)) },
+        text = { Text(body ?: stringResource(R.string.upgrade_body)) },
         confirmButton = { TextButton(onClick = onPlans, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.see_plans)) } },
         dismissButton = { TextButton(onClick = onDismiss, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.not_now)) } },
     )

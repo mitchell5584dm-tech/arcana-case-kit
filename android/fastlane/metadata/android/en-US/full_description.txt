@@ -1,30 +1,35 @@
-Arcalume is a forensic document recovery app. Photograph or import a page that glare, shadow or bad light has ruined, and Arcalume parses the damage, repairs what the photo still holds, and tells you plainly what it could not bring back.
+Representing yourself in a custody, divorce, protective-order, housing or small-claims case? Arcalume turns the evidence on your phone into an organized, numbered exhibit packet you can print, file or hand to a lawyer, without uploading anything.
 
-RECOVER, THEN PROVE IT
-• Evens out shadows and uneven light, so faded text that is still in the photo comes back.
-• Restores the ink around glare spots, where text is washed out but not gone.
-• Fills blown-out glare cores smoothly, and marks every filled pixel with a hatched overlay. Those pixels held no data. Arcalume never invents characters and never calls them recovered.
-• Leaves solid black areas alone by default, because they are often redactions.
-• Maps the reading order of multi-column pages, column by column.
+BUILD YOUR CASE FILE
+• Add photos, videos, screenshots, PDFs, Word files and voice recordings, or share them straight from WhatsApp, Gallery, Files or your mail app.
+• WhatsApp chat exports and SMS Backup & Restore files become a clean transcript: every message in time order, with the date, time and sender.
+• Number, describe and date each exhibit, or put them all in date order with one tap.
 
-EVIDENCE YOU CAN CHECK (PRO)
-• Seals the untouched original, the recovered copy, the filled-pixel map and a full report into one encrypted vault file (Argon2id and AES-256-GCM).
-• Records every sealing in a custody log where each entry is chained to the one before it with SHA-256. Editing, reordering or removing entries breaks the chain, and the app checks it for you.
-• Vaults open in the Arcalume desktop app too, and the desktop reads what the phone writes.
+SEE WHAT YOUR FILES SAY ABOUT THEMSELVES
+• Reads hidden metadata: when and on what phone a photo was taken, its GPS location, who created and last edited a Word file, when a PDF was made and how many times it was saved.
+• Flags what the other side may question before they do: photos saved again by editing software, PDFs changed after they were first made, tracked changes and deleted text still inside a Word file, and files renamed to the wrong type.
+• Finds embedded preview images and pictures hidden inside other files.
+
+A PACKET THAT LOOKS LIKE IT BELONGS IN COURT (PRO)
+• One PDF with a cover page, an index of exhibits, a chronology, a tabbed section for every exhibit, page numbers and a page stamp on every page.
+• Each exhibit shows its SHA-256 fingerprint, a code computed from the file's exact bytes, so anyone can confirm it was not changed.
+• Ends with a fill-in declaration for authenticating your exhibits.
+• The verification bundle is a ZIP of the untouched originals, their fingerprints, the case summary and the custody log.
+
+A CUSTODY LOG YOU CAN CHECK
+• Adding, numbering, removing and exporting exhibits is recorded in a log where every entry is chained to the one before it. Editing, reordering or deleting entries breaks the chain, and the app checks it for you.
+
+RECOVER DAMAGED DOCUMENT PHOTOS
+• Evens out glare, shadow and poor light so faded text in a photo of a page comes back. Every pixel the photo held no data for is marked, and nothing is invented.
+• Seals the original and the recovered copy into an encrypted vault (Argon2id and AES-256-GCM).
 
 PRIVATE BY DESIGN
 • Arcalume does not request internet access. No account, no ads, no tracking, no cloud.
 • Evidence is excluded from cloud backups. Nothing leaves the phone unless you export it.
 
-BUILT FOR EVERYONE
-• Designed for TalkBack, Switch Access and keyboards, and checked with Google's Accessibility Test Framework. Comparing and zooming work without gestures.
-• Findings are written in plain language and marked with a word and an icon, not colour alone.
-• Text follows your system font size, in light and dark themes.
-
 FREE AND PRO
-Free: recovery, comparison, the filled-pixel map, and opening and checking any vault.
-Pro: clean saved copies, sealing into vaults with a custody log, and sealing a whole session at once.
-Every new install gets Pro free for 180 days. After that, keep it with one payment of US$5.99. No subscription, no account, and vaults you sealed can always be opened and checked.
+Free: your case file, every metadata check, chat transcripts, packets of up to three exhibits, document recovery, and opening and checking any vault.
+Pro: packets with every exhibit, verification bundles, vault sealing and clean saved copies. One payment, no subscription.
 
-WHAT IT CAN'T DO
-Text inside a blown-out glare spot is gone from that photo; retake it at an angle. The custody log proves records were not changed after sealing. It cannot prove what happened to a photo before it reached the app, and it is not a certification that evidence is admissible.
+WHAT IT IS NOT
+Arcalume is not a law firm and does not give legal advice. It reports what your files say about themselves; it cannot prove what happened to a file before it reached your phone, and it does not certify that evidence is admissible. The court decides that.

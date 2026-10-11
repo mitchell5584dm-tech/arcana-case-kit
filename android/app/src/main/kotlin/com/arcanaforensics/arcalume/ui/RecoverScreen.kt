@@ -81,6 +81,8 @@ class RecoverActions(
     val saveCopy: (Page) -> Unit,
     val seal: (List<Page>) -> Unit,
     val remove: (Page) -> Unit,
+    /** Adds the original and the recovered copy to the case as exhibits. */
+    val addToCase: (Page) -> Unit = {},
 )
 
 @Composable
@@ -186,6 +188,9 @@ fun ReviewScreen(pages: List<Page>, page: Page, isPro: Boolean, actions: Recover
         if (!isPro) Text(stringResource(R.string.save_copy_free_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         FilledTonalButton(onClick = { actions.seal(listOf(page)) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
             Icon(Icons.Filled.Lock, contentDescription = null); Spacer(Modifier.width(12.dp)); Text(stringResource(R.string.seal))
+        }
+        OutlinedButton(onClick = { actions.addToCase(page) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+            Text(stringResource(R.string.add_to_case))
         }
         if (pages.size > 1) {
             OutlinedButton(onClick = { actions.seal(pages) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {

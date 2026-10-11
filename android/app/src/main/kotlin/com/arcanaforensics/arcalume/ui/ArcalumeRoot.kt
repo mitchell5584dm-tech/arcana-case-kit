@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoFixHigh
+import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.WorkspacePremium
 import androidx.compose.material3.CircularProgressIndicator
@@ -66,6 +67,7 @@ fun ArcalumeRoot(vm: AppViewModel) {
     var camera by rememberSaveable { mutableStateOf(false) }
     var sealing by remember { mutableStateOf<List<Page>?>(null) }
     var upgrade by rememberSaveable { mutableStateOf(false) }
+    var upgradeBundle by rememberSaveable { mutableStateOf(false) }
     var opening by remember { mutableStateOf<Pair<String, ByteArray>?>(null) }
     var wrongPass by remember { mutableStateOf(false) }
     var deleting by remember { mutableStateOf<EvidenceRepo.VaultFile?>(null) }
@@ -88,6 +90,10 @@ fun ArcalumeRoot(vm: AppViewModel) {
     val createBin = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { uri -> uri?.let { pendingSave?.invoke(it) }; pendingSave = null }
     val createJson = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri -> uri?.let { pendingSave?.invoke(it) }; pendingSave = null }
     val createText = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("text/plain")) { uri -> uri?.let { pendingSave?.invoke(it) }; pendingSave = null }
+    val createPdf = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri -> uri?.let { pendingSave?.invoke(it) }; pendingSave = null }
+    val createZip = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri -> uri?.let { pendingSave?.invoke(it) }; pendingSave = null }
+    val pickCaseMedia = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(50)) { if (it.isNotEmpty()) vm.addToCase(it) }
+    val pickCaseFiles = rememberLauncherForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { if (it.isNotEmpty()) vm.addToCase(it) }
 
     fun exportVault(f: File) { pendingSave = { vm.exportFile(f, it) }; createBin.launch(f.name) }
     val choosePhotos = { pickPhotos.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }
@@ -112,6 +118,19 @@ fun ArcalumeRoot(vm: AppViewModel) {
         saveCopy = { page -> pendingSave = { vm.saveCopy(page, it) }; createPng.launch(Evidence.safeName(page.name).substringBeforeLast('.') + "-recovered.png") },
         seal = { pages -> if (ent.seal) sealing = pages else upgrade = true },
         remove = vm::remove,
+        addToCase = vm::addPageToCase,
+    )
+    val outName = Evidence.safeName(ui.case.displayTitle).take(40)
+    val caseActions = CaseActions(
+        addPhotos = { pickCaseMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo)) },
+        addFiles = { pickCaseFiles.launch(arrayOf("*/*")) },
+        saveDetails = vm::saveCaseDetails,
+        edit = vm::editExhibit,
+        move = vm::moveExhibit,
+        remove = vm::removeExhibit,
+        sort = vm::sortExhibits,
+        packet = { pendingSave = { vm.exportPacket(it) }; createPdf.launch("$outName-exhibit-packet.pdf") },
+        bundle = { if (ent.packet) { pendingSave = { vm.exportBundle(it) }; createZip.launch("$outName-verification-bundle.zip") } else upgradeBundle = true },
     )
     val vaultActions = VaultActions(
         open = { v -> wrongPass = false; opening = v.file.name to v.file.readBytes() },
@@ -141,6 +160,7 @@ fun ArcalumeRoot(vm: AppViewModel) {
         bottomBar = {
             NavigationBar {
                 for ((tab, label, icon) in listOf(
+                    Triple(Tab.CASE, R.string.tab_case, Icons.Filled.Folder),
                     Triple(Tab.RECOVER, R.string.tab_recover, Icons.Filled.AutoFixHigh),
                     Triple(Tab.VAULT, R.string.tab_vault, Icons.Filled.Lock),
                     Triple(Tab.PLAN, R.string.tab_plan, Icons.Filled.WorkspacePremium),
@@ -153,6 +173,7 @@ fun ArcalumeRoot(vm: AppViewModel) {
     ) { inner ->
         Box(Modifier.fillMaxSize().padding(inner)) {
             when (ui.tab) {
+                Tab.CASE -> CaseScreen(ui.case, ent, caseActions)
                 Tab.RECOVER -> {
                     val page = ui.current
                     if (page == null) EmptyState(recoverActions) else ReviewScreen(ui.pages, page, ent.cleanExport, recoverActions)
@@ -167,6 +188,7 @@ fun ArcalumeRoot(vm: AppViewModel) {
     sealing?.let { pages -> SealDialog(pages.size, onSeal = { pass -> sealing = null; vm.seal(pages, pass) }, onDismiss = { sealing = null }) }
     ui.sealed?.let { SealedDialog(it, onCopied = { vm.say(context.getString(R.string.copied)) }, onExport = ::exportVault, onDismiss = vm::dismissSealed) }
     if (upgrade) UpgradeDialog(onPlans = { upgrade = false; vm.select(Tab.PLAN) }, onDismiss = { upgrade = false })
+    if (upgradeBundle) UpgradeDialog(onPlans = { upgradeBundle = false; vm.select(Tab.PLAN) }, onDismiss = { upgradeBundle = false }, body = stringResource(R.string.upgrade_body_bundle))
     opening?.let { (name, bytes) ->
         OpenVaultDialog(name, wrongPass, onOpen = { pass -> wrongPass = false; vm.openVault(bytes, pass) { wrongPass = true } }, onDismiss = { opening = null })
     }

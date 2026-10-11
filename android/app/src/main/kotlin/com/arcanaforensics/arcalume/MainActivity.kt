@@ -32,11 +32,26 @@ class MainActivity : ComponentActivity() {
         handle(intent)
     }
 
-    /** "Share to Arcalume": the shared image is read once, through the grant that came with it. */
+    /**
+     * "Share to Arcalume". Each file is read once, through the grant that came with it. A photo
+     * shared to "Recover with Arcalume" opens in Recover; anything shared to "Add to Arcalume
+     * case" (chat exports, documents, several files at once) is added to the case as exhibits.
+     */
     private fun handle(intent: Intent?) {
-        if (intent?.action != Intent.ACTION_SEND) return
-        val uri: Uri? = if (Build.VERSION.SDK_INT >= 33) intent.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
-        else @Suppress("DEPRECATION") intent.getParcelableExtra(Intent.EXTRA_STREAM)
-        uri?.let { vm.importUris(listOf(it)) }
+        val uris: List<Uri> = when (intent?.action) {
+            Intent.ACTION_SEND -> listOfNotNull(
+                if (Build.VERSION.SDK_INT >= 33) intent.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
+                else @Suppress("DEPRECATION") intent.getParcelableExtra(Intent.EXTRA_STREAM),
+            )
+            Intent.ACTION_SEND_MULTIPLE -> (
+                if (Build.VERSION.SDK_INT >= 33) intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM, Uri::class.java)
+                else @Suppress("DEPRECATION") intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM)
+            ).orEmpty()
+            else -> return
+        }
+        if (uris.isEmpty()) return
+        val type = intent.type.orEmpty()
+        val viaCase = intent.component?.className?.endsWith(".AddToCase") == true
+        if (!viaCase && intent.action == Intent.ACTION_SEND && type.startsWith("image/")) vm.importUris(uris) else vm.addToCase(uris)
     }
 }

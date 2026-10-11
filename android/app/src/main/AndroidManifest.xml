@@ -39,5 +39,20 @@
                 <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
+
+        <!-- "Add to Arcalume case": any file or several at once, including WhatsApp and SMS exports.
+             The same activity, under its own share-sheet label; it routes by this alias name. -->
+        <activity-alias
+            android:name=".AddToCase"
+            android:targetActivity=".MainActivity"
+            android:label="@string/share_target_case"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+        </activity-alias>
     </application>
 </manifest>

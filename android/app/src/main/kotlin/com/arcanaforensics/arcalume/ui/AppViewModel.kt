@@ -10,7 +10,13 @@ import androidx.lifecycle.viewModelScope
 import com.arcanaforensics.arcalume.ArcalumeApp
 import com.arcanaforensics.arcalume.Brand
 import com.arcanaforensics.arcalume.R
+import com.arcanaforensics.arcalume.core.Case
+import com.arcanaforensics.arcalume.core.Entitlements
 import com.arcanaforensics.arcalume.core.Evidence
+import com.arcanaforensics.arcalume.core.Exhibit
+import com.arcanaforensics.arcalume.core.Packet
+import com.arcanaforensics.arcalume.core.sha256Hex
+import com.arcanaforensics.arcalume.data.CaseRepo
 import com.arcanaforensics.arcalume.core.Json
 import com.arcanaforensics.arcalume.core.RepairConfig
 import com.arcanaforensics.arcalume.core.Vault
@@ -28,7 +34,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.io.File
 
-enum class Tab { RECOVER, VAULT, PLAN }
+enum class Tab { CASE, RECOVER, VAULT, PLAN }
 
 data class SealOutcome(val names: List<String>, val head: String, val vaults: List<File>)
 
@@ -40,7 +46,8 @@ data class OpenedVault(val manifest: Json.Obj, val entries: Map<String, ByteArra
 }
 
 data class UiState(
-    val tab: Tab = Tab.RECOVER,
+    val tab: Tab = Tab.CASE,
+    val case: Case = Case(),
     val pages: List<Page> = emptyList(),
     val currentId: Long? = null,
     val busy: String? = null,
@@ -58,6 +65,7 @@ data class UiState(
 class AppViewModel(app: Application) : AndroidViewModel(app) {
     val pro = (app as ArcalumeApp).pro
     val repo = EvidenceRepo(app)
+    val cases = CaseRepo(app, repo)
     private val state = MutableStateFlow(UiState())
     val ui: StateFlow<UiState> = state
     private val messages = MutableStateFlow<String?>(null)
@@ -65,7 +73,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     val message: StateFlow<String?> = messages
     private val work = Mutex()
 
-    init { refreshVault() }
+    init { refreshVault(); refreshCase() }
 
     private fun str(@StringRes id: Int, vararg args: Any) = getApplication<Application>().getString(id, *args)
     fun say(text: String) { messages.value = text }
@@ -152,6 +160,100 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
                 out.write(buf, 0, n)
             }
             return out.toByteArray()
+        }
+    }
+
+    // ---- case ---------------------------------------------------------------------
+
+    fun refreshCase() {
+        viewModelScope.launch {
+            val c = withContext(Dispatchers.IO) { cases.store.load() }
+            state.update { it.copy(case = c) }
+        }
+    }
+
+    private suspend fun caseChange(block: () -> Case) {
+        val c = withContext(Dispatchers.IO) { block() }
+        state.update { it.copy(case = c, tab = Tab.CASE) }
+        refreshVault()
+    }
+
+    /** Adds files as exhibits, in the order given. Any type is accepted; nothing is changed. */
+    fun addToCase(uris: List<Uri>) {
+        for (uri in uris) {
+            val name = displayName(uri)
+            job(str(R.string.working_adding, name)) {
+                val bytes = try { withContext(Dispatchers.IO) { readCapped(uri) } } catch (e: Exception) {
+                    say(str(R.string.read_failed, name, e.message ?: e.javaClass.simpleName)); return@job
+                }
+                if (bytes == null) { say(str(R.string.too_large, name)); return@job }
+                try {
+                    caseChange { cases.store.add(name, bytes).first }
+                    say(str(R.string.case_added, name))
+                } catch (e: Exception) {
+                    Log.w("Arcalume", "add to case failed", e)
+                    say(str(R.string.read_failed, name, e.message ?: e.javaClass.simpleName))
+                }
+            }
+        }
+    }
+
+    /** Adds a recovered page: the untouched original, then the lighting-corrected copy. */
+    fun addPageToCase(page: Page) = job(str(R.string.working_adding, page.name)) {
+        caseChange {
+            val (_, orig) = cases.store.add(page.name, page.original, page.name.substringBeforeLast('.'))
+            val base = page.name.substringBeforeLast('.')
+            val (c, copy) = cases.store.add("$base-recovered.png", page.restoredPng, str(R.string.case_recovered_title, base))
+            val n = c.exhibits.indexOfFirst { it.id == orig.id } + 1
+            cases.store.edit(copy.id, copy.title, str(R.string.case_recovered_note, n), "")
+        }
+        say(str(R.string.case_added_page))
+    }
+
+    fun saveCaseDetails(title: String, number: String, court: String, party: String, prefix: String) = job(str(R.string.case_saving)) {
+        caseChange { cases.store.updateDetails(title, number, court, party, prefix) }
+        say(str(R.string.case_saved))
+    }
+
+    fun editExhibit(e: Exhibit, title: String, description: String, date: String) = job(str(R.string.case_saving)) {
+        caseChange { cases.store.edit(e.id, title, description, date) }
+    }
+
+    fun moveExhibit(e: Exhibit, delta: Int) = job(str(R.string.case_saving)) { caseChange { cases.store.move(e.id, delta) } }
+
+    fun sortExhibits() = job(str(R.string.case_saving)) { caseChange { cases.store.sortByDate() }; say(str(R.string.case_sorted)) }
+
+    fun removeExhibit(e: Exhibit) = job(str(R.string.delete)) { caseChange { cases.store.remove(e.id) }; say(str(R.string.case_removed)) }
+
+    private val packetLimit get() = if (pro.entitlements.value.packet) Int.MAX_VALUE else Entitlements.FREE_PACKET_EXHIBITS
+
+    fun exportPacket(uri: Uri) = job(str(R.string.working_packet)) {
+        try {
+            val built = withContext(Dispatchers.Default) { Packet.build(cases.packetInput(), packetLimit) }
+            withContext(Dispatchers.IO) { write(uri, built.pdf); cases.store.recordExport("packet_exported", built.sha256, minOf(state.value.case.exhibits.size, packetLimit)) }
+            refreshVault()
+            say(str(R.string.packet_saved, built.pages))
+        } catch (e: Exception) {
+            Log.w("Arcalume", "packet failed", e)
+            say(str(R.string.save_failed, e.message ?: e.javaClass.simpleName))
+        }
+    }
+
+    /** Pro only: the ZIP of originals, sums, manifest, log and packet. */
+    fun exportBundle(uri: Uri) = job(str(R.string.working_bundle)) {
+        if (!pro.entitlements.value.packet) return@job
+        try {
+            val zip = withContext(Dispatchers.Default) {
+                val input = cases.packetInput()
+                val built = Packet.build(input)
+                Packet.bundle(input, built, repo.ledgerFile.takeIf { it.exists() }?.readBytes())
+            }
+            withContext(Dispatchers.IO) { write(uri, zip); cases.store.recordExport("bundle_exported", sha256Hex(zip), state.value.case.exhibits.size) }
+            refreshVault()
+            say(str(R.string.bundle_saved))
+        } catch (e: Exception) {
+            Log.w("Arcalume", "bundle failed", e)
+            say(str(R.string.save_failed, e.message ?: e.javaClass.simpleName))
         }
     }
 

@@ -27,5 +27,8 @@ object Brand {
 
     const val MAX_INPUT_BYTES = 100 * 1024 * 1024
 
+    /** Long side, in pixels, of images printed in an exhibit packet (about 250 dpi across a page). */
+    const val PACKET_IMAGE_MAX_SIDE = 2000
+
     const val TOOL = "Arcalume for Android " + BuildConfig.VERSION_NAME
 }

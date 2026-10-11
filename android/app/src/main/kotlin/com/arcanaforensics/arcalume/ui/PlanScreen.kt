@@ -63,7 +63,7 @@ fun PlanScreen(ent: Entitlements, price: String?, sellsInApp: Boolean, acceptsKe
             if (trial) Text(stringResource(R.string.trial_after), style = MaterialTheme.typography.bodyMedium)
             Text(stringResource(R.string.free_includes), style = MaterialTheme.typography.bodyMedium)
             Heading(stringResource(R.string.pro_adds))
-            for (s in listOf(R.string.pro_clean, R.string.pro_seal, R.string.pro_batch, R.string.pro_once)) {
+            for (s in listOf(R.string.pro_packet, R.string.pro_clean, R.string.pro_seal, R.string.pro_batch, R.string.pro_once)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Icon(Icons.Filled.Check, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                     Text(stringResource(s), style = MaterialTheme.typography.bodyMedium)

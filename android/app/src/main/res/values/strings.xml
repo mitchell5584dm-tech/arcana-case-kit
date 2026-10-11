@@ -3,10 +3,12 @@
     <string name="app_name">Arcalume</string>
     <!-- Home-screen label; the beta build overrides it so both can sit side by side. -->
     <string name="launcher_name">Arcalume</string>
-    <string name="app_subtitle">Document forensics</string>
+    <string name="app_subtitle">Evidence and exhibits</string>
     <string name="share_target">Recover with Arcalume</string>
+    <string name="share_target_case">Add to Arcalume case</string>
 
     <!-- navigation -->
+    <string name="tab_case">Case</string>
     <string name="tab_recover">Recover</string>
     <string name="tab_vault">Vault</string>
     <string name="tab_plan">Plan</string>
@@ -171,7 +173,7 @@
     <string name="plan_pro">Pro</string>
     <string name="plan_pro_from_play">Pro, bought on Google Play. Thank you.</string>
     <string name="plan_pro_licensed">Pro, licensed to %1$s</string>
-    <string name="free_includes">Free includes recovery, comparison, the filled-pixel map, and opening and checking any vault.</string>
+    <string name="free_includes">Free includes your case file with metadata checks, exhibit packets of up to three exhibits, recovery, comparison, the filled-pixel map, and opening and checking any vault.</string>
     <string name="pro_adds">Pro adds</string>
     <string name="pro_clean">Clean saved copies, without the watermark</string>
     <string name="pro_seal">Sealing into encrypted vaults with a custody log</string>
@@ -214,4 +216,68 @@
     <string name="status_repaired">repaired</string>
     <string name="status_detected">damage reported, not changed</string>
     <string name="status_skipped">too damaged, not changed</string>
+
+    <!-- case kit -->
+    <string name="case_empty_title">Build your case file</string>
+    <string name="case_empty_body">Add the photos, screenshots, documents and message exports you want a judge to see. Arcalume numbers them as exhibits, shows what each file\'s hidden metadata says, records every step in a tamper-evident log, and turns them into a printable exhibit packet. Nothing leaves this phone.</string>
+    <string name="case_add_heading">Add evidence</string>
+    <string name="case_add_photos">Add photos or videos</string>
+    <string name="case_add_files">Add files</string>
+    <string name="case_add_help">Files are kept exactly as they are. You can also share to \"Add to Arcalume case\" from WhatsApp, Gallery, Files or a mail app.</string>
+    <string name="case_chat_help_title">How to add text messages and chats</string>
+    <string name="case_chat_help_whatsapp">WhatsApp: open the chat, tap the three dots, then More, then Export chat. Choose Without media (or Include media), and pick \"Add to Arcalume case\". The packet prints every message in time order with the sender.</string>
+    <string name="case_chat_help_sms">Text messages: back them up with the SMS Backup &amp; Restore app to an XML file, then add that file here. Arcalume reads the file on the phone; it never reads your messages directly.</string>
+    <string name="case_details_heading">Case details</string>
+    <string name="case_title">Case name (for example, Smith v. Jones)</string>
+    <string name="case_number">Case number</string>
+    <string name="case_court">Court</string>
+    <string name="case_party">Your name, as it appears in the case</string>
+    <string name="case_prefix">Page stamp prefix</string>
+    <string name="case_prefix_help">Every page is stamped %1$s-000001, %1$s-000002 and so on.</string>
+    <string name="case_save">Save</string>
+    <string name="case_saved">Case details saved.</string>
+    <string name="case_saving">Saving…</string>
+    <plurals name="case_exhibits_heading">
+        <item quantity="one">%d exhibit</item>
+        <item quantity="other">%d exhibits</item>
+    </plurals>
+    <string name="case_sort">Put in date order</string>
+    <string name="case_sorted">Exhibits renumbered in date order.</string>
+    <string name="case_exhibit_label">Exhibit %1$d: %2$s</string>
+    <string name="case_exhibit_number">Exhibit %1$d</string>
+    <plurals name="case_cautions">
+        <item quantity="one">%d thing to be ready to explain</item>
+        <item quantity="other">%d things to be ready to explain</item>
+    </plurals>
+    <string name="case_details_button">Details</string>
+    <string name="case_move_up">Move exhibit %1$d up</string>
+    <string name="case_move_down">Move exhibit %1$d down</string>
+    <string name="case_exhibit_title">Short description</string>
+    <string name="case_exhibit_description">What it shows and how you got it</string>
+    <string name="case_exhibit_date">Date of the event</string>
+    <string name="case_exhibit_date_help">Optional, for example 2024-01-14 21:05. Leave empty to use the date in the file.</string>
+    <string name="case_file_facts">What the file says about itself</string>
+    <string name="case_fingerprint">SHA-256 fingerprint</string>
+    <string name="case_remove">Remove from case</string>
+    <string name="case_remove_confirm">Remove this exhibit? The removal is recorded in the custody log.</string>
+    <string name="case_remove_yes">Yes, remove it</string>
+    <string name="case_removed">Exhibit removed. The others were renumbered.</string>
+    <string name="case_added">Added %1$s to the case.</string>
+    <string name="case_added_page">The original and the recovered copy were added to the case.</string>
+    <string name="case_recovered_title">%1$s (recovered copy)</string>
+    <string name="case_recovered_note">Lighting-corrected copy of Exhibit %1$d made with Arcalume. Areas the photo held no data for were filled and are marked in the sealed vault; no text was added.</string>
+    <string name="case_output_heading">Get it ready for court</string>
+    <string name="case_output_body">The exhibit packet is one PDF with a cover page, an index, a chronology, every exhibit with its fingerprint and metadata, page stamps, and a declaration you can sign. The verification bundle is a ZIP of the untouched originals with their fingerprints and the custody log, so anyone can check the packet.</string>
+    <string name="case_free_limit">The free plan prints the first %1$d exhibits. Pro prints all of them and adds the verification bundle.</string>
+    <string name="case_build_packet">Make exhibit packet (PDF)</string>
+    <string name="case_build_bundle">Make verification bundle (ZIP)</string>
+    <string name="case_not_legal_advice">Arcalume organizes evidence; it is not a law firm and does not give legal advice. Check your court\'s rules for exhibits and filing.</string>
+    <string name="working_adding">Adding %1$s…</string>
+    <string name="working_packet">Making the exhibit packet…</string>
+    <string name="working_bundle">Making the verification bundle…</string>
+    <string name="packet_saved">Exhibit packet saved (%1$d pages).</string>
+    <string name="bundle_saved">Verification bundle saved.</string>
+    <string name="add_to_case">Add to case as exhibits</string>
+    <string name="upgrade_body_bundle">The verification bundle, and packets with more than three exhibits, are part of Pro.</string>
+    <string name="pro_packet">Exhibit packets with every exhibit, and verification bundles</string>
 </resources>

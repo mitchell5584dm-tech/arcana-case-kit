@@ -1,5 +1,5 @@
 First release of Arcalume.
-• Repairs glare, shadow and uneven light in photos of documents, and marks every pixel it had to fill.
-• Seals the original and the recovered copy into an encrypted vault, recorded in a custody log you can check.
+• Case kit: number your evidence as exhibits, read each file's hidden metadata, and make a court-ready exhibit packet (PDF) and verification bundle.
+• WhatsApp and SMS exports become a time-ordered transcript.
+• Repairs glare and shadow in photos of documents, and seals originals in an encrypted vault with a custody log.
 • No internet access, no account, no ads.
-• Every new install gets Pro free for 180 days.

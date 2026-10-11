@@ -83,8 +83,11 @@ data class Entitlements(val plan: Plan, val source: Source, val licensee: String
     val cleanExport get() = plan == Plan.PRO
     val seal get() = plan == Plan.PRO
     val batch get() = plan == Plan.PRO
+    /** Exhibit packets and verification bundles with every exhibit; Free prints the first [FREE_PACKET_EXHIBITS]. */
+    val packet get() = plan == Plan.PRO
 
     companion object {
+        const val FREE_PACKET_EXHIBITS = 3
         val FREE = Entitlements(Plan.FREE, Source.NONE)
         fun pro(source: Source, licensee: String = "", expires: String? = null) = Entitlements(Plan.PRO, source, licensee, expires)
     }

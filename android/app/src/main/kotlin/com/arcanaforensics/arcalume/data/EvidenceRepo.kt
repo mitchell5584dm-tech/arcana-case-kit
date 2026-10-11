@@ -16,7 +16,7 @@ import java.io.File
 class EvidenceRepo(context: Context) {
     val dir = File(context.filesDir, "vault")
     private val prefs = context.getSharedPreferences("custody", Context.MODE_PRIVATE)
-    private val ledger get() = Ledger(File(dir, Evidence.LEDGER_NAME))
+    val ledger get() = Ledger(File(dir, Evidence.LEDGER_NAME))
     val ledgerFile: File get() = File(dir, Evidence.LEDGER_NAME)
 
     data class VaultFile(val file: File, val sealedMillis: Long, val bytes: Long)
@@ -25,7 +25,8 @@ class EvidenceRepo(context: Context) {
 
     val knownHead: String? get() = prefs.getString("head", null)
 
-    private fun remember(entry: Json.Obj) {
+    /** Remembers [entry] as the newest head, for any part of the app that writes to the log. */
+    fun remember(entry: Json.Obj) {
         prefs.edit().putString("head", entry["hash"]!!.str()).apply()
     }
 

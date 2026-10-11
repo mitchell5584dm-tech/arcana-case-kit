@@ -30,13 +30,21 @@ class SampleFlowTest {
 
     @Test fun sampleRecoversAndEveryScreenPassesAccessibilityChecks() {
         rule.enableAccessibilityChecks()
+        rule.onRoot().tryPerformAccessibilityChecks()   // the Case tab, first on launch
+        rule.onNodeWithText("Build your case file").assertExists()
+        rule.onNodeWithText("How to add text messages and chats").performScrollTo().performClick()
         rule.onRoot().tryPerformAccessibilityChecks()
+        rule.onNodeWithText("Recover").performClick()
         rule.onNodeWithText("Try a sample page").performScrollTo().performClick()
         awaitText("What Arcalume found and did")
         rule.onNodeWithText("glare spot", substring = true, useUnmergedTree = true).assertExists()
         rule.onRoot().tryPerformAccessibilityChecks()
         rule.onNodeWithText("Show filled areas").performScrollTo().performClick()
         rule.onNodeWithText("Show reading order").performScrollTo().performClick()
+        rule.onRoot().tryPerformAccessibilityChecks()
+        rule.onNodeWithText("Add to case as exhibits").performScrollTo().performClick()
+        awaitText("2 exhibits")
+        rule.onNodeWithText("Exhibit 2:", substring = true).assertExists()
         rule.onRoot().tryPerformAccessibilityChecks()
         rule.onNodeWithText("Plan").performClick()   // a new install is inside the 180-day free Pro offer
         rule.onNodeWithText("Pro, free for 180 more days", substring = true, useUnmergedTree = true).assertExists()
