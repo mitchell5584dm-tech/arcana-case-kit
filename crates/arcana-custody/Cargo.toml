@@ -3,10 +3,13 @@ name = "arcana-custody"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
-description = "Local SQLite hash-chained chain-of-custody ledger."
+description = "Local SQLite hash-chained chain-of-custody ledger, with optional Ed25519-signed rows."
 
 [dependencies]
 arcana-core = { path = "../arcana-core" }
+ed25519-dalek = { workspace = true }
+rand = { workspace = true }
+rand_core = { workspace = true }
 rusqlite = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }

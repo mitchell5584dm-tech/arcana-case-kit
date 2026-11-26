@@ -18,6 +18,16 @@ rust-version = "1.75"
 
 [workspace.dependencies]
 aes-gcm = "=0.10.3"
+argon2 = "=0.5.3"
+# ed25519-dalek 2.1.1 (not 2.2.0): same SigningKey/VerifyingKey API, but
+# 2.2.0 needs Rust 1.81 and this workspace pins 1.75 (argon2 0.5.3 needs
+# only 1.65). If the toolchain is ever bumped to 1.81+, 2.2.0 can be used
+# with no code change.
+ed25519-dalek = "=2.1.1"
+# NOTE on transitive deps: `der` pulls in `base64ct`, and Cargo.lock pins
+# it at 1.6.0 on purpose — base64ct 1.7+ needs Rust 1.81 and 1.8+ needs
+# edition 2024 / Rust 1.85, which break this workspace's Rust 1.75 pin.
+# Do not `cargo update -p base64ct` past 1.6.0 until the toolchain moves.
 sha2 = "=0.10.8"
 thiserror = "=1.0.63"
 rand = "=0.8.5"

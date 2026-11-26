@@ -12,6 +12,14 @@ pub const TOOL_NAME: &str = "arcana-forensics";
 pub const TOOL_VERSION: &str = env!("CARGO_PKG_VERSION");
 pub const VAULT_MAGIC: &[u8; 4] = b"ARCN";
 pub const VAULT_VERSION: u8 = 1;
+/// Legacy version byte: the repo's own 100,000-round SHA-256 KDF
+/// (domain `arcana-vault-kdf-v1`). Kept readable; never used for new seals.
+/// Note: this is NOT the same KDF as the master bundle's v0x01 — same
+/// version byte, different derivation. See `arcana-vault`.
+pub const VAULT_VERSION_V1: u8 = 1;
+/// Current version byte: Argon2id (64 MiB / 3 iter / 4 lanes, V0x13).
+/// The default for all new seals, in both Rust and Python Recon.
+pub const VAULT_VERSION_V2: u8 = 2;
 pub const DEFAULT_MAX_FILE_BYTES: u64 = 64 * 1024 * 1024;
 
 #[derive(Debug, Error)]
@@ -36,6 +44,22 @@ pub enum ArcanaError {
 
     #[error("ledger error: {0}")]
     Ledger(String),
+
+    #[error("a signing (seed) or verifying (public) key was malformed: {0}")]
+    InvalidSigningKey(String),
+
+    #[error("custody row {row_id} has no signature where a signed verification was requested")]
+    SignatureMissing { row_id: i64 },
+
+    #[error("custody row {row_id} has a signature that does not verify against its entry_hash")]
+    SignatureInvalid { row_id: i64 },
+
+    #[error("custody ledger tampered at row {row_id}: expected {expected}, found {actual}")]
+    LedgerTampered {
+        row_id: i64,
+        expected: String,
+        actual: String,
+    },
 
     #[error("classification error: {0}")]
     Classify(String),

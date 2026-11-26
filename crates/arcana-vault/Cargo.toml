@@ -8,6 +8,7 @@ description = "Argon2id key derivation and AES-256-GCM evidence sealing."
 [dependencies]
 arcana-core = { path = "../arcana-core" }
 aes-gcm = { workspace = true }
+argon2 = { workspace = true }
 sha2 = { workspace = true }
 rand = { workspace = true }
 rand_core = { workspace = true }

@@ -3,7 +3,7 @@
 For each input the engine writes two files into the output directory and
 nothing else (the repaired image never touches disk unencrypted):
 
-* ``<name>.arcv``: the repaired page as PNG, sealed in an ARCN v1 vault blob.
+* ``<name>.arcv``: the repaired page as PNG, sealed in an ARCN v2 vault blob.
 * ``<name>.json``: the report (hashes, triage, filled regions, layout nodes).
   The report is plaintext. It contains the source file name and page geometry
   but no pixel data and no key material.

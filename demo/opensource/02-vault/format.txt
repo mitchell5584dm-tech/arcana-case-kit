@@ -4,3 +4,10 @@ version   1 byte   0x01
 salt     16 bytes  random
 nonce    12 bytes  random, unique per object
 body      n bytes  AES-256-GCM ciphertext including 16-byte tag
+
+Arcana vault object v2 (current default for new seals)
+Same layout as v1; only the version byte and the key derivation change:
+version   1 byte   0x02
+KDF       Argon2id, 64 MiB memory, 3 iterations, 4 lanes, 32-byte key,
+          Argon2 version 0x13. v1 objects (100,000-round SHA-256 KDF)
+          still open; nothing seals v1 any more.
