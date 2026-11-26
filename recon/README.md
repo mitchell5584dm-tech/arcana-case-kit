@@ -1,8 +1,8 @@
 # arcana-recon
 
 Repair photographed or scanned document pages damaged by lighting, map their
-block layout and reading order, and seal the result in an ARCN v1 vault blob
-that the Rust `arcana-vault` crate can also open.
+block layout and reading order, and seal the result in an ARCN v2 vault blob
+(v1 blobs still open) that the Rust `arcana-vault` crate can also open.
 
 Everything here is classical image processing (OpenCV + NumPy). There is no
 machine-learning model in this package.
@@ -24,7 +24,7 @@ pytest
 
 | File | Contents |
 |---|---|
-| `<name>.arcv` | The repaired page as PNG, sealed: `ARCN \| 0x01 \| salt(16) \| nonce(12) \| AES-256-GCM ciphertext+tag` |
+| `<name>.arcv` | The repaired page as PNG, sealed: `ARCN \| 0x02 \| salt(16) \| nonce(12) \| AES-256-GCM ciphertext+tag` (v0x01 blobs still open) |
 | `<name>.json` | Report: source SHA-256, clipped pixel counts, every filled region, layout blocks in reading order, SHA-256 of the sealed PNG. Plaintext; contains the source file name and page geometry but no pixels and no key material. |
 
 Existing outputs are never overwritten. `extract` needs only the passphrase,
@@ -51,8 +51,9 @@ in any process, and checks the unsealed PNG against the report's hash.
      figures or scan borders.
 4. **Layout.** Otsu binarization, dilation into blocks, then a recursive
    XY-cut reading order that finishes one column before starting the next.
-5. **Seal.** Passphrase-derived key (100,000 rounds of SHA-256, same as the
-   Rust crate), fresh salt and nonce per file.
+5. **Seal.** Passphrase-derived key (Argon2id, 64 MiB / 3 iterations /
+   4 lanes — same as the Rust crate), fresh salt and nonce per file.
+   v0x01 blobs (100,000 rounds of SHA-256) still open.
 
 ## What is real and what is not
 
@@ -82,8 +83,9 @@ in any process, and checks the unsealed PNG against the report's hash.
 
 ## Limits
 
-- The key stretch is pure Python and holds the GIL, so large batches are
-  bound by it (~0.1 s per file) even though OpenCV work runs in parallel.
+- The key derivation (Argon2id) holds the GIL, so large batches are
+  bound by it (noticeably slower per file than the old SHA-256 stretch)
+  even though OpenCV work runs in parallel.
 - Flattening treats dark areas larger than about 4% of the page (big photos)
   as background and washes them out.
 - XY-cut assumes column gutters are wider than paragraph gaps; tables whose

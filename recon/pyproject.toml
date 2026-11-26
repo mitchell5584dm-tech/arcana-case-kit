@@ -5,13 +5,14 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "arcana-recon"
 version = "0.1.0"
-description = "Classical document-image repair (illumination flattening, clipped-region inpainting, XY-cut reading order) sealed into ARCN v1 vault blobs."
+description = "Classical document-image repair (illumination flattening, clipped-region inpainting, XY-cut reading order) sealed into ARCN v2 vault blobs (v1 readable)."
 requires-python = ">=3.9"
 license = { text = "MIT" }
 dependencies = [
     "numpy>=1.22",
     "opencv-python-headless>=4.6",
     "cryptography>=41",
+    "argon2-cffi>=23",
 ]
 
 [project.optional-dependencies]

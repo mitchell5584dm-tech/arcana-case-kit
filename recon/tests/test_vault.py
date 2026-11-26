@@ -13,20 +13,44 @@ INTEROP_BLOB = (
     "4152434e01e78798961be15be292a5015c03be1f69ef8f27bb0e8eb1a13b5d6b7c613fbd69c17f04"
     "42ba547e8346e23fd099b9fde0aa49cb356bd47d5dca502d72841313a52adf98e8ad51c2"
 )
+# Fixed-salt Argon2id vector, shared with the master bundle (file 15) and
+# the Rust tests: passphrase "synthetic-test-passphrase-123", salt bytes
+# 0..15, Argon2id 64 MiB / 3 iter / 4 lanes / V0x13.
+KDF_VECTOR_V2 = "f9e2c6bd35f0058799c8b731f0c42e2cc3049ac67ea2a5ede896db188e73b50d"
+# v0x02 blob sealed by the Rust crate (arcana-acquire), same passphrase and
+# plaintext as INTEROP_BLOB but version 2. See test_unseals_v2_blob_sealed_by_rust.
+INTEROP_BLOB_V2 = (
+    "4152434e02142bf643509a93068c1146f33d4177883e07e40f1097187a9f68900cf61384a7d0c8"
+    "bc86a20e165b45a185e4b0761b62218dcda88ec4ba1238d9861b4d8e87aabcd71bf1cd9fa27fb808"
+)
 
 
 def test_kdf_matches_rust_vector():
     assert vault.derive_key(PASSPHRASE, bytes(range(16))).hex() == KDF_VECTOR
 
 
+def test_argon2id_kdf_matches_bundle_vector():
+    assert vault.derive_key_v2("synthetic-test-passphrase-123", bytes(range(16))).hex() == KDF_VECTOR_V2
+
+
 def test_unseals_shared_interop_blob():
     assert vault.unseal(bytes.fromhex(INTEROP_BLOB), PASSPHRASE) == b"arcana-recon interop vector"
 
 
+def test_unseals_v2_blob_sealed_by_rust():
+    assert vault.unseal(bytes.fromhex(INTEROP_BLOB_V2), PASSPHRASE) == b"arcana-recon interop vector v2"
+
+
 def test_roundtrip_and_layout():
     blob = vault.seal(b"payload", PASSPHRASE)
-    assert blob[:4] == b"ARCN" and blob[4] == 1
+    assert blob[:4] == b"ARCN" and blob[4] == 2
     assert len(blob) == vault.HEADER_LEN + len(b"payload") + vault.TAG_LEN
+    assert vault.unseal(blob, PASSPHRASE) == b"payload"
+
+
+def test_v1_legacy_roundtrip():
+    blob = vault.seal_v1(b"payload", PASSPHRASE)
+    assert blob[:4] == b"ARCN" and blob[4] == 1
     assert vault.unseal(blob, PASSPHRASE) == b"payload"
 
 
@@ -51,7 +75,7 @@ def test_tampered_blob_fails():
 @pytest.mark.parametrize("blob,msg", [
     (b"ARCN\x01" + b"\x00" * 10, "too short"),
     (b"NOPE\x01" + b"\x00" * 60, "bad magic"),
-    (b"ARCN\x02" + b"\x00" * 60, "unsupported"),
+    (b"ARCN\x03" + b"\x00" * 60, "unsupported"),
 ])
 def test_malformed_blobs(blob, msg):
     with pytest.raises(vault.VaultError, match=msg):

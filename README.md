@@ -10,8 +10,8 @@
 | | Arcana | Typical FOSS tools |
 |---|---|---|
 | Air-gapped operation | ✅ zero network stack | varies |
-| Vault sealing | ✅ AES-256-GCM, per-file random nonce, 100,000-round SHA-256 key stretch (Argon2id planned) | often none |
-| Custody ledger | ✅ SHA-256 hash chain in a plain SQLite file (external timestamp anchoring is not in this tree) | local chain only |
+| Vault sealing | ✅ AES-256-GCM, per-file random nonce, Argon2id key stretch (64 MiB / 3 iter / 4 lanes), v0x02 default; v0x01 100,000-round SHA-256 legacy blobs still open | often none |
+| Custody ledger | ✅ SHA-256 hash chain in a plain SQLite file, with optional Ed25519-signed rows (`arcana-acquire keygen`); record the chain tip outside the case (see [SECURITY.md](SECURITY.md)) | local chain only |
 | Scope | ✅ acquisition only — destructive ops permanently removed | n/a |
 
 ## Get Arcana
@@ -19,8 +19,8 @@ Community Edition source is in this repository (MIT). Paid tiers and verified bi
 releases: **[arcana-forensics.com/try](https://arcana-forensics.com/try)**
 
 ## Format & verification
-- Vault blob layout: `ARCN | version | salt(16) | nonce(12) | ciphertext+tag` (see [SECURITY.md](SECURITY.md))
-- Ledger line hash: SHA-256 over `ts|operator|action|path|sha256|prev_hash`
+- Vault blob layout: `ARCN | version | salt(16) | nonce(12) | ciphertext+tag` (see [SECURITY.md](SECURITY.md)). Version `0x02` (Argon2id) is the default for new seals; version `0x01` (legacy SHA-256 KDF) blobs still open.
+- Ledger line hash: SHA-256 over `ts|operator|action|path|sha256|prev_hash`. Rows can also carry an Ed25519 signature over their `entry_hash` (see [SECURITY.md](SECURITY.md) for the anchoring procedure).
 - Roadmap, not shipped in this tree: a published ARCN2 spec and external timestamping
   (OpenTimestamps or RFC 3161). Until then, record the final ledger hash outside the case.
 - Known gap: `verify` does not yet cross-check the ledger against `manifest.json`.
@@ -28,7 +28,7 @@ releases: **[arcana-forensics.com/try](https://arcana-forensics.com/try)**
 ## Document reconstruction (Python)
 [`recon/`](recon/README.md) repairs lighting-damaged document photos (shadow
 flattening, glare handling), maps multi-column reading order, and seals the
-result in ARCN v1 vault blobs readable by `arcana-vault`. Its README lists
+result in ARCN v2 vault blobs readable by `arcana-vault` (v1 blobs still open). Its README lists
 what is implemented and what is still aspirational. MIT license.
 
 ## Arcana Restore (desktop app)
